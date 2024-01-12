@@ -1,28 +1,47 @@
 from django.shortcuts import render, redirect,HttpResponse
 from .models import User
+from .form import cabri
 from django.contrib.auth.hashers import check_password
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login,authenticate,logout
 def register(request):
     if request.method == 'POST':     
-        username = request.POST.get('username')
-        email = request.POST.get("email")
-        password= request.POST.get('password')
-        user = User.objects.create(name=username, email=email, password=password)
-        user.save()
-        return render(request, 'my_app/connexion.html')
-    return render(request, 'my_app/register.html')
+        youssef = cabri(request.POST)
+        if youssef.is_valid():
+            # form.save(commit=False)
+            # form.instance.email = form.cleaned_data['email']
+            belier = youssef.save()
+            print("tchai tchai yakoi le cabri",belier.username)
+            return render(request, 'my_app/connexion.html')
+    else :
+        youssef = cabri()
+    return render(request, 'my_app/register.html', {'youssef': youssef})
+    
+    
+    # if request.method == 'POST':
+    #     form = cabri(request.POST)
+    #     if form.is_valid():
+    #         # form.save(commit=False)
+    #         # form.instance.email = form.cleaned_data['email']
+    #         user = form.save()
+    #         print(f"Utilisateur créé : nom: {user.username} password :{user.password} email: {user.email}")
+    #         return render(request, 'my_app/connexion.html')
+    # else:
+    #     form = cabri()
+    # return render(request, 'my_app/register.html', {'form': form})
+       
 
 
 def logine(request):
     if request.method == 'POST':
         password= request.POST["password"]
-        email =request.POST["email"]
+        username = request.POST["username"]
         context={"name":password}
-        user= authenticate(request, password=password, email=email)
-        print(f"nom: {password}, email: {email}")
+        user= authenticate(request, password=password, username=username)
+        print(user)
+        print(f"password: {password}, email: {username}")
         if user is not None:
             login(request, user)
-            return redirect("main")
+            return render(request, 'my_app/cabri.html')
         else:
             return HttpResponse("Échec de la connexion")
     return render(request, 'my_app/connexion.html')
@@ -45,5 +64,10 @@ def logine(request):
 #     return render(request, 'my_app/connexin.html')
      
 
+
+def logouts(request):
+    logout(request)
+    return redirect('logine')
+    
 def main(request):
     return render(request, 'my_app/cabri.html')

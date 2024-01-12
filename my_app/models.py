@@ -1,8 +1,8 @@
 from django.db import models
 
 # Create your models here.
-
+# python manage.py runserver
 class User(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(default="youssef@gmail.com", unique =True)
+    username = models.CharField(max_length=100)
+    email = models.EmailField(unique =True)
     password=models.CharField(max_length=200)

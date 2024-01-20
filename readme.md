@@ -1,0 +1,1 @@
+losqu'un invité fini de travailler sur ça branch il push sur ça branch le main fais un pull sur la branch de l'invité avec la commande 'git pull origin <branch invité>', et le main fais un git push sur github
